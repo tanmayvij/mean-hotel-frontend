@@ -11,7 +11,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AuthComponent implements OnInit {
 
+    emailSent: boolean = false;
+    newPassword: string;
     loginForm: FormGroup;
+    regForm: FormGroup;
+    forgotForm: FormGroup;
     constructor(
         private router: Router,
         private data : ApiserviceService,
@@ -20,6 +24,17 @@ export class AuthComponent implements OnInit {
         this.loginForm = this.formbuilder.group({
             'userid': ['', Validators.required],
             'password': ['', Validators.required]
+        })
+        this.regForm = this.formbuilder.group({
+            'userid': ['', Validators.required],
+            'password': ['', Validators.required],
+            'name': ['', Validators.required],
+            'email': ['', Validators.required],
+            'phone': ['', Validators.required]
+        })
+        this.forgotForm = this.formbuilder.group({
+            'userid': ['', Validators.required],
+            'token': ['', Validators.required]
         })
     }
     loggedIn()
@@ -36,7 +51,7 @@ export class AuthComponent implements OnInit {
     }
     login()
     {
-        let url: string = 'http://35.196.35.2:8080/api/users/login';
+        let url: string = 'http://localhost:8080/api/users/login';
         this.data.postData(url, this.loginForm.value).subscribe(data => {
             let token : string = data['token'];
             sessionStorage.setItem('token', token);
@@ -44,7 +59,34 @@ export class AuthComponent implements OnInit {
         });
     }
     register()
-    {}
+    {
+        let url: string = 'http://localhost:8080/api/users/register';
+        this.data.postData(url, this.regForm.value).subscribe(data => {
+        console.log(data);
+        this.regForm.reset();
+        
+        // Display successful notification
+        });
+    }
     forgot()
-    {}
+    {
+        let url: string = 'http://localhost:8080/api/users/forgot';
+        this.data.postData(url, this.forgotForm.value).subscribe(data => {
+            // Hide user id field and show token field
+            this.emailSent = true;
+        });
+    }
+    reset()
+    {
+        let resetParams: Object = this.forgotForm.value;
+        let url: string = 'http://localhost:8080/api/users/resetpass?';
+        for (let entry in resetParams) {
+            url += entry + '=' + encodeURIComponent(resetParams[entry]) + '&';
+        }
+        url = url.substring(0, url.length-1)
+        this.data.getData(url).subscribe(data => {
+            // Display new password
+            this.newPassword = "New Password" + data['newPassword'];
+        });
+    }
 }
