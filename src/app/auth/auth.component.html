@@ -16,10 +16,10 @@
     <button type="submit">Register</button>
   </form>
 
-  <form (ngSubmit)="reset()" [formGroup]="forgotForm"> 
+  <form (keydown.enter)="$event.preventDefault()" (ngSubmit)="reset()" [formGroup]="forgotForm"> 
       <h2>Forgot Password</h2>
       <input [style.display]="emailSent ? 'none' : 'block'" type="text" formControlName="userid" placeholder="User ID..." required="true">
-      <button [style.display]="emailSent ? 'none' : 'block'" (click)="forgot()">Send Reset Email</button><br>
+      <button type="button" [style.display]="emailSent ? 'none' : 'block'" (click)="forgot()">Send Reset Email</button><br>
       <input [style.display]="!emailSent ? 'none' : 'block'" type="text" formControlName="token" placeholder="Token..." required="true">
       <button [style.display]="!emailSent ? 'none' : 'block'" type="submit">Reset Password</button>
       <p>{{ newPassword }}</p>
