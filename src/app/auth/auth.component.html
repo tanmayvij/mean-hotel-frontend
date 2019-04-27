@@ -1,0 +1,18 @@
+<br>
+<form (ngSubmit)="login()" [formGroup]="loginForm"> 
+  <input type="text" formControlName="userid" placeholder="User ID..." required>
+  <input type="password" formControlName="password" placeholder="Password..." required>
+  <button type="submit">Login</button>
+</form>
+
+<form (ngSubmit)="register()" [formGroup]="regForm"> 
+    <input type="text" formControlName="userid" placeholder="User ID..." required>
+    <input type="password" formControlName="password" placeholder="Password..." required>
+    <button type="submit">Register</button>
+  </form>
+
+  <form (ngSubmit)="forgot()" [formGroup]="forgotForm"> 
+      <input type="text" formControlName="userid" placeholder="User ID..." required>
+      <input type="password" formControlName="password" placeholder="Password..." required>
+      <button type="submit">Reset Password</button>
+    </form>
