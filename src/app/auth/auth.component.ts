@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import { ApiserviceService } from '../apiservice.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+declare var M: any;
 @Component
 ({
     selector: 'authmenu',
@@ -56,7 +56,9 @@ export class AuthComponent implements OnInit {
             let token : string = data['token'];
             sessionStorage.setItem('token', token);
             this.router.navigate(['/']);
-        });
+        },
+        error => M.toast({html: error.error.error, displayLength: 2000})
+        );
     }
     register()
     {
@@ -64,9 +66,11 @@ export class AuthComponent implements OnInit {
         this.data.postData(url, this.regForm.value).subscribe(data => {
         console.log(data);
         this.regForm.reset();
-        
-        // Display successful notification
-        });
+        M.toast({html: "Successfully registered.", displayLength: 2000})
+    
+        },
+        error => M.toast({html: error.error.error, displayLength: 2000})
+        );
     }
     forgot()
     {
@@ -74,7 +78,9 @@ export class AuthComponent implements OnInit {
         this.data.postData(url, this.forgotForm.value).subscribe(data => {
             // Hide user id field and show token field
             this.emailSent = true;
-        });
+        },
+        error => M.toast({html: error.error.error, displayLength: 2000})
+        );
     }
     reset()
     {
@@ -87,6 +93,8 @@ export class AuthComponent implements OnInit {
         this.data.getData(url).subscribe(data => {
             // Display new password
             this.newPassword = "New Password " + data['newPassword'];
-        });
+        },
+        error => M.toast({html: error.error.error, displayLength: 2000})
+        );
     }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ApiserviceService} from '../apiservice.service';
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+declare var M: any;
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -65,7 +65,9 @@ export class AdminComponent implements OnInit {
       }
       this.photos = this.photos.substring(0, this.photos.length - 1);
       console.log(data)
-    });
+    },
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
     this.getReviews();
     this.revSubmitted = false;
   }
@@ -74,8 +76,9 @@ export class AdminComponent implements OnInit {
 		this.data.putData(url, this.hotelForm.value).subscribe(data => {
 			console.log(data);
 			this.router.navigate([`hotels/${this.route.snapshot.params.hotelId}`]);
-			// Notification success message
-		});
+		},
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
 	}
   onReview(id)
   {
@@ -83,7 +86,9 @@ export class AdminComponent implements OnInit {
     let url: string = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}/reviews/${id}`;
     this.data.getData(url).subscribe(data => {
       this.editReview = data;
-    });
+    },
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
   }
   editReviewMethod(id)
   {
@@ -99,7 +104,9 @@ export class AdminComponent implements OnInit {
       console.log(data);
       this.getReviews();
       this.editClicked = false;
-    });
+    },
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
 
   }
   deleteReview(id)
@@ -108,13 +115,17 @@ export class AdminComponent implements OnInit {
     this.data.deleteData(this.url).subscribe(data => {
       this.getReviews();
       console.log(data)
-    });
+    },
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
 
   }
   getReviews() {
     let url = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}/reviews`;
     this.data.getData(url).subscribe(data => {
       this.reviews = data;
-    });
+    },
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
   }
 }

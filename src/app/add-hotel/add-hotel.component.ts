@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {ApiserviceService} from '../apiservice.service';
-
+declare var M: any;
 @Component({
   selector: 'app-add-hotel',
   templateUrl: './add-hotel.component.html',
@@ -32,6 +32,8 @@ export class AddHotelComponent implements OnInit {
 			console.log(data);
 			this.hotelForm.reset();
 			// Notification success message
-		});
+		},
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
 	}
 }

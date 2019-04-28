@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ApiserviceService} from '../apiservice.service';
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+declare var M: any;
 @Component({
   selector: 'app-hotel-one',
   templateUrl: './hotel-one.component.html',
@@ -35,7 +35,9 @@ export class HotelOneComponent implements OnInit {
     this.data.getData(this.url).subscribe(data => {
       this.hotel = data;
       console.log(data)
-    });
+    },
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
     this.getReviews();
     this.revSubmitted = false;
   } 
@@ -53,13 +55,17 @@ export class HotelOneComponent implements OnInit {
       console.log(data);
       this.getReviews();
       this.revForm.reset();
-    });
+    },
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
   }
 
   getReviews() {
     let url = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}/reviews`;
     this.data.getData(url).subscribe(data => {
       this.reviews = data;
-    });
+    },
+    error => M.toast({html: error.error.error, displayLength: 2000})
+    );
   }
 }
