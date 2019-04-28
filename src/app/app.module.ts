@@ -10,6 +10,7 @@ import { AuthComponent } from './auth/auth.component';
 import { AdminComponent } from './admin/admin.component';
 import { HotelsComponent } from './hotels/hotels.component';
 import { HotelOneComponent } from './hotel-one/hotel-one.component';
+import { AddHotelComponent } from './add-hotel/add-hotel.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { HotelOneComponent } from './hotel-one/hotel-one.component';
     AuthComponent,
     AdminComponent,
     HotelsComponent,
-    HotelOneComponent
+    HotelOneComponent,
+    AddHotelComponent
   ],
   imports: [
     BrowserModule,

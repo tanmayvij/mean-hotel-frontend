@@ -86,7 +86,7 @@ export class AuthComponent implements OnInit {
         url = url.substring(0, url.length-1)
         this.data.getData(url).subscribe(data => {
             // Display new password
-            this.newPassword = "New Password" + data['newPassword'];
+            this.newPassword = "New Password " + data['newPassword'];
         });
     }
 }
