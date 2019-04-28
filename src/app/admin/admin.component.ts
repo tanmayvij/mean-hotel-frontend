@@ -94,8 +94,6 @@ export class AdminComponent implements OnInit {
   {
     this.url = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}/reviews/${id}`;
     let review: Object = {
-      "name": "Test",
-      "id": "test",
       "review": this.revForm.controls.review.value,
       "rating": this.revForm.controls.rating.value
     };

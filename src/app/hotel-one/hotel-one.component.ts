@@ -45,8 +45,6 @@ export class HotelOneComponent implements OnInit {
   {
     this.revSubmitted = true;
     let review: Object = {
-      "name": "Test",
-      "id": "test",
       "review": this.revForm.controls.review.value,
       "rating": this.revForm.controls.rating.value
     };
