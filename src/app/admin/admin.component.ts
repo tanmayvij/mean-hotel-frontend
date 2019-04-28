@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {ApiserviceService} from '../apiservice.service';
+import { ActivatedRoute, Router } from "@angular/router";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-admin',
@@ -7,10 +9,112 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
+  hotel: Object;
+  url: string;
+  Arr = Array;
+  revForm : FormGroup;
+  hotelForm : FormGroup;
+  revSubmitted: boolean;
+  editClicked: boolean = false;
+  editReview: Object = {
+    "name": "",
+    "id": "",
+    "review": "",
+    "rating": ""
+  };
+  services:string = '';
+  photos:string = '';
+  reviews: any = [];
+  
+  constructor(
+    private data: ApiserviceService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private formBuilder: FormBuilder
+    )
+  {
+    this.revForm = this.formBuilder.group({
+      review: ['', Validators.required],
+      rating: [, Validators.required]
+    });
+    this.hotelForm = this.formBuilder.group({
+      'name' : ['', Validators.required],
+      'description': ['', Validators.required],
+      'address' : ['', Validators.required],
+      'lat' : [, Validators.required],
+      'lng' : [, Validators.required],
+      'stars' : [, Validators.required],
+      'currency': ['', Validators.required],
+      'services': ['', Validators.required],
+      'photos': ['']
+    })
   }
 
+  ngOnInit() {
+    this.url = "http://35.196.35.2:8080/api/hotels/" + this.route.snapshot.params.hotelId;
+    this.data.getData(this.url).subscribe(data => {
+      this.hotel = data;
+      for(let service in data['services'])
+      {
+        this.services += data['services'][service] + ';';
+      }
+      this.services = this.services.substring(0, this.services.length - 1);
+      for(let photo in data['photos'])
+      {
+        this.photos += data['photos'][photo] + ';';
+      }
+      this.photos = this.photos.substring(0, this.photos.length - 1);
+      console.log(data)
+    });
+    this.getReviews();
+    this.revSubmitted = false;
+  }
+  onHotel() {
+		let url: string = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}`;
+		this.data.putData(url, this.hotelForm.value).subscribe(data => {
+			console.log(data);
+			this.router.navigate([`hotels/${this.route.snapshot.params.hotelId}`]);
+			// Notification success message
+		});
+	}
+  onReview(id)
+  {
+    this.editClicked = true;
+    let url: string = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}/reviews/${id}`;
+    this.data.getData(url).subscribe(data => {
+      this.editReview = data;
+    });
+  }
+  editReviewMethod(id)
+  {
+    this.url = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}/reviews/${id}`;
+    let review: Object = {
+      "name": "Test",
+      "id": "test",
+      "review": this.revForm.controls.review.value,
+      "rating": this.revForm.controls.rating.value
+    };
+    
+    this.data.putData(this.url, review).subscribe(data => {
+      console.log(data);
+      this.getReviews();
+      this.editClicked = false;
+    });
+
+  }
+  deleteReview(id)
+  {
+    this.url = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}/reviews/${id}`;
+    this.data.deleteData(this.url).subscribe(data => {
+      this.getReviews();
+      console.log(data)
+    });
+
+  }
+  getReviews() {
+    let url = `http://35.196.35.2:8080/api/hotels/${this.route.snapshot.params.hotelId}/reviews`;
+    this.data.getData(url).subscribe(data => {
+      this.reviews = data;
+    });
+  }
 }

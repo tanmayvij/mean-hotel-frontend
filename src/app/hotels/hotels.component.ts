@@ -18,7 +18,8 @@ export class HotelsComponent implements OnInit {
   
   constructor( private data: ApiserviceService, private router: Router) {  }
 
-  ngOnInit() {
+  getHotels()
+  {
     this.url = "http://35.196.35.2:8080/api/hotels";
     var params = this.router.url.split('?');
     if(params[1])
@@ -27,6 +28,18 @@ export class HotelsComponent implements OnInit {
       this.hotels = data;
     console.log(data)
     });
+  }
+  ngOnInit() {
+    this.getHotels();
+  }
+  delete(id)
+  {
+    this.url = `http://35.196.35.2:8080/api/hotels/${id}`;
+    this.data.deleteData(this.url).subscribe(data => {
+      this.getHotels();
+      console.log(data)
+    });
+
   }
 
 }
